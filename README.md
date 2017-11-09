@@ -1,42 +1,62 @@
-# botfalardepython
-bot do grupo bora falar de python
+# **botfalardepython**
 
-Features:
+Bot do [grupo](https://t.me/BoraFalarDePython) bora falar de python.
 
-até quinta feira as 12:00 pode inscrever temas após esse período
-abre pra votação até as 20:30
-toda semana zera a votação
-fica registrado um histórico de lives
-lembrete de votação agendado
+# Features:
 
-um voto por usuário apenas
+* Até quinta feira as 12:00 pode inscrever temas após esse período
+* Abre pra votação até as 20:30
+* Toda semana zera a votação
+* Fica registrado um histórico de lives
+* Lembrete de votação agendado
+* Um voto por usuário apenas
+* Lista de votação
 
-Lista de votação
-- bot do grupo
-- live sobre wagtail
-- live sobre programação funcional
+# Comandos 
 
+## **/add**
+```
 /add <nome-da-live>
->> /add Live de testes
+```
+   * #### Exemplo:
+```
+/add Live de testes
+```
+   * #### Retorna:
+```
 Live de testes adicionada para votação
+```
 
+## **/list**
+```
 /list
->> /list
+```
+   * #### Retorna:
+```
 3 - Live de testes - @jlugao - votos: 5
 2 - bot do grupo - @user1 - votos:2
-4 - live sobre wagtail - votos:1
-1 - live sobre programação funcional - votos: 0
+4 - live sobre wagtail - @user2 votos: 1
+1 - live sobre programação funcional - @user2 votos: 0
+```
 
-
+## **/vote**
+```
 /vote <id-da-live>
->> /vote 1
+```
+   * #### Exemplo:
+```
+/vote 1
+```
+   * #### Retorna:
+```
 @fulano votou na live "live sobre programação funcional"
-total de votos: 1
+```
 
-
+## **/history**
+```
 /history
->>/history
+```
+   * #### Retorna:
+```
 26/08/2017 - Live sobre programação funcional - https://youtu.be/21321344231
-
-/add_video <id_da_live_no_historico> <link>
->> 
+```
