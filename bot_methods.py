@@ -1,21 +1,20 @@
 from requests import get, post
 from decouple import config
-# from db_bot import DbBot
 
 
 TOKEN = config('TOKEN')
 
-URL_BASE = f"https://api.telegram.org/bot{TOKEN}"
-URL_UPDATES = f"{URL_BASE}/getUpdates"
-URL_SEND_MESSAGE = f"{URL_BASE}/sendMessage?"
+URL_BASE = "https://api.telegram.org/bot{}".format(TOKEN)
+URL_UPDATES = "{}/getUpdates".format(URL_BASE)
+URL_SEND_MESSAGE = "{}/sendMessage?".format(URL_BASE)
 URL_WEBHOOK = "https://amaurirg.ddns.net"
-URL_SET_WEBHOOK = f"https://api.telegram.org/bot{TOKEN}/setWebhook?url={URL_WEBHOOK}"
-URL_GET_WEBHOOK_INFO = f"{URL_WEBHOOK}/bot{TOKEN}/getWebhookInfo"
+URL_SET_WEBHOOK = "https://api.telegram.org/bot{}/setWebhook?url={}".format(TOKEN, URL_WEBHOOK)
+URL_GET_WEBHOOK_INFO = "{}/bot{}/getWebhookInfo".format(URL_WEBHOOK, TOKEN)
 
 
 class BotFalar:
     def getme(self):
-        self.resp_getme = get(f'{URL_BASE}/getMe').json()
+        self.resp_getme = get('{}/getMe'.format(URL_BASE)).json()
         self.bot_name = self.resp_getme['result']['first_name']
         return self.bot_name
 
