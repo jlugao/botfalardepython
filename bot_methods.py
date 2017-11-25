@@ -7,9 +7,9 @@ TOKEN = config('TOKEN')
 URL_BASE = "https://api.telegram.org/bot{}".format(TOKEN)
 URL_UPDATES = "{}/getUpdates".format(URL_BASE)
 URL_SEND_MESSAGE = "{}/sendMessage?".format(URL_BASE)
-URL_WEBHOOK = "https://amaurirg.ddns.net"
-URL_SET_WEBHOOK = "https://api.telegram.org/bot{}/setWebhook?url={}".format(TOKEN, URL_WEBHOOK)
-URL_GET_WEBHOOK_INFO = "{}/bot{}/getWebhookInfo".format(URL_WEBHOOK, TOKEN)
+# URL_WEBHOOK = "https://"
+# URL_SET_WEBHOOK = "https://api.telegram.org/bot{}/setWebhook?url={}".format(TOKEN, URL_WEBHOOK)
+# URL_GET_WEBHOOK_INFO = "{}/bot{}/getWebhookInfo".format(URL_WEBHOOK, TOKEN)
 
 
 class BotFalar:
@@ -37,7 +37,7 @@ class BotFalar:
         return self.last_update_id
 
     def send_message(self, text):
-        self.response = post(f"{URL_SEND_MESSAGE}chat_id={self.chat_id}&text={text}")
+        self.response = post("{}chat_id={}&text={}".format(URL_SEND_MESSAGE, self.chat_id, text))
         return self.response.text
 
     def handle_updates(self):
