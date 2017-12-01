@@ -1,8 +1,7 @@
 import sqlite3
-from bot_methods import BotFalar
 
 
-class DbBot(BotFalar):
+class DbBot:
     def __init__(self, dbname="todo.sqlite"):
         self.dbname = dbname
         self.conn = sqlite3.connect(dbname)
@@ -12,9 +11,9 @@ class DbBot(BotFalar):
         self.conn.execute(stmt)
         self.conn.commit()
 
-    def add_item(self, item_text):
+    def add_item(self, item_text, username):
         stmt = "INSERT INTO lives (description, name_username, votes) VALUES (?, ?, ?)"
-        args = (item_text, self.username, 0)
+        args = (item_text, username, 0)
         self.conn.execute(stmt, args)
         self.conn.commit()
 
@@ -31,10 +30,6 @@ class DbBot(BotFalar):
     def get_lives_from(self):
         stmt = "SELECT description, name_username FROM lives"
         return [[x[0], x[1]] for x in self.conn.execute(stmt)]
-
-    # def get_lives_dict(self):
-    #     stmt = "SELECT description, name_username FROM lives"
-    #     return {x[0]: x[1] for x in self.conn.execute(stmt)}
 
     def get_lives_list(self):
         stmt = "SELECT description, name_username, votes FROM lives"
