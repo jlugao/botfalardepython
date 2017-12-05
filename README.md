@@ -2,6 +2,34 @@
 
 Bot do [grupo](https://t.me/BoraFalarDePython) bora falar de python.
 
+# Como ajudar a desenvolver
+
+### Passos a seguir
+
+1. crie um diretório para o projeto
+2. mude para o novo diretório criado
+3. no diretório criado, crie um virtualenv para o projeto
+4. ative o virtualenv
+5. inicie o git no diretório do projeto
+6. adicione o repositório remoto
+7. faça um pull para baixar os arquivos
+8. instale os requisitos
+9. crie um bot no botfather do Telegram
+10. vejas as issues existentes e eleja uma para trabalhar
+
+### Os passos de 1 a 7 podem seguir os comandos abaixo. (Linux ou MacOS)
+
+```commandline
+md botborafalar
+cd botborafalar
+python3 -m venv .venv
+source .venv/bin/activate
+git init
+git remote add origin https://github.com/jlugao/botfalardepython.git
+git pull origin master
+pip install -r requirements-dev.txt
+```
+
 # Features:
 
 * Até quinta feira as 12:00 pode inscrever temas após esse período
