@@ -17,7 +17,7 @@ Bot do [grupo](https://t.me/BoraFalarDePython) bora falar de python.
 9. crie um bot no botfather do Telegram
 10. vejas as issues existentes e eleja uma para trabalhar
 
-### Os passos de 1 a 7 podem seguir os comandos abaixo. (Linux ou MacOS)
+### Os passos de 1 a 8 podem seguir os comandos abaixo. (Linux ou MacOS)
 
 ```commandline
 md botborafalar
