@@ -24,12 +24,14 @@ class BotFalar:
         resp = get('{}?offset={}&timeout={}'.format(self.URL_UPDATES, offset, timeout)).json()
         result = len(resp['result'])
         if result >= 1:
-            dict_updates['last_index'] = resp['result'][result - 1]
-            dict_updates['chat'] = dict_updates['last_index']['message']['chat']
-            dict_updates['last_update_id'] = dict_updates['last_index']['update_id']
-            dict_updates['chat_id'] = dict_updates['chat']['id']
-            dict_updates['first_name'] = dict_updates['chat']['first_name']
-            dict_updates['text'] = dict_updates['last_index']['message']['text']
+            dict_updates = {
+                'last_index': resp['result'][result - 1],
+                'chat': dict_updates['last_index']['message']['chat'],
+                'last_update_id': dict_updates['last_index']['update_id'],
+                'chat_id': dict_updates['chat']['id'],
+                'first_name': dict_updates['chat']['first_name'],
+                'text': dict_updates['last_index']['message']['text'],
+            }
             if 'username' in dict_updates['chat']:
                 dict_updates['username'] = dict_updates['chat']['username']
             else:
@@ -41,7 +43,6 @@ class BotFalar:
         if reply_markup:
             self.message += "&reply_markup={}".format(reply_markup)
         return post(self.message)
-
 
     def handle_updates(self, offset = 0, timeout = 0):
         
