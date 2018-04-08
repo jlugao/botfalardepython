@@ -2,6 +2,8 @@ from requests import get, post
 
 import json
 
+from db_bot import DbBot
+
 # URL_WEBHOOK = "https://"
 # URL_SET_WEBHOOK = "https://api.telegram.org/bot{}/setWebhook?url={}".format(TOKEN, URL_WEBHOOK)
 # URL_GET_WEBHOOK_INFO = "{}/bot{}/getWebhookInfo".format(URL_WEBHOOK, TOKEN)
@@ -23,14 +25,16 @@ class BotFalar:
         dict_updates = {'last_update_id': 0}
         resp = get('{}?offset={}&timeout={}'.format(self.URL_UPDATES, offset, timeout)).json()
         result = len(resp['result'])
-        if result >= 1:
+        if 'edited_message' in resp['result'][result - 1].keys():
+            resp['result'][result - 1]['message'] = resp['result'][result - 1]['edited_message']
+        if result > 1:
             dict_updates = {
                 'last_index': resp['result'][result - 1],
-                'chat': dict_updates['last_index']['message']['chat'],
-                'last_update_id': dict_updates['last_index']['update_id'],
-                'chat_id': dict_updates['chat']['id'],
-                'first_name': dict_updates['chat']['first_name'],
-                'text': dict_updates['last_index']['message']['text'],
+                'chat': resp['result'][result - 1]['message']['chat'],
+                'last_update_id': resp['result'][result - 1]['update_id'],
+                'chat_id': resp['result'][result - 1]['message']['chat']['id'],
+                'first_name': resp['result'][result - 1]['message']['chat']['first_name'],
+                'text': resp['result'][result - 1]['message']['text'],
             }
             if 'username' in dict_updates['chat']:
                 dict_updates['username'] = dict_updates['chat']['username']
@@ -43,11 +47,13 @@ class BotFalar:
         if reply_markup:
             self.message += "&reply_markup={}".format(reply_markup)
         return post(self.message)
+    
 
     def handle_updates(self, offset = 0, timeout = 0):
         
         dict_updates = self.get_updates(offset, timeout)
-        
+        if 'text' not in dict_updates.keys():
+            return dict_updates
         lives = self.db.get_lives()
         if dict_updates['text'].startswith("/"):
             
@@ -60,7 +66,7 @@ class BotFalar:
                 
             elif dict_updates['text'].startswith("/list"):
                 self.db.lives_list = ["{} - @{}\nVotos: {}\n".format(i[0], i[1], i[2]) for i in self.db.get_lives_list()]
-                message = "\n".join(self.lives_list)
+                message = "\n".join(self.db.lives_list)
                 self.send_message("Lives propostas\n\n{}".format(message), dict_updates['chat_id'])
                 
             elif dict_updates['text'].startswith("/vote"):
@@ -71,17 +77,18 @@ class BotFalar:
         else:
 
             if dict_updates['text'] in lives:
-                self.current_votes = self.len_votes(dict_updates['text'])
-                self.update_votes(dict_updates['text'], self.current_votes[0] + 1)
-                self.send_message("@{} votou na Live '{}'".format(dict_updates['username'], dict_updates['chat_id'],
-                                  dict_updates['text']))
+                self.current_votes = self.db.len_votes(dict_updates['text'])
+                self.db.update_votes(dict_updates['text'], self.current_votes[0] + 1)
+                self.send_message("@{} votou na Live '{}'".format(dict_updates['username'], 
+                                  dict_updates['text']),
+                                  dict_updates['chat_id'])
             else:
                 keyboard = self.build_keyboard(['/list', '/vote'])
                 self.send_message("Olá {}, sou o {}, um bot de votação de lives para esse grupo.\n"
                                   "Escolha uma opção ou /add <nome_da_live> para propor uma live"
                                   .format(dict_updates['first_name'], self.get_me()), dict_updates['chat_id'], keyboard)
         
-        return dict_updates['last_update_id']
+        return dict_updates
 
 
     def build_keyboard(self, items):
